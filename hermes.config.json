@@ -1,7 +1,7 @@
 {
   "model": {
     "provider": "groq",
-    "model": "moonshotai/kimi-k2-instruct",
+    "model": "llama-3.1-8b-instant",
     "apiKey": "${GROQ_API_KEY}"
   },
   "memory": {
@@ -11,5 +11,6 @@
   "skills": {
     "autoLearn": true,
     "directory": "./skills"
-  }
+  },
+  "max_tokens": 2048
 }
