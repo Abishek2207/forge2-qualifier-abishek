@@ -37,11 +37,9 @@ flowchart TD
         OpenClaw["Generates Python code"]
         Sandbox["▶️ Executes code locally"]
         Outputs["💾 Saves to outputs/"]
-        GitPush["📦 Commits to GitHub"]
         
         OpenClaw --> Sandbox
         Sandbox --> Outputs
-        Outputs --> GitPush
     end
 
     OpenClaw -->|"posts structured report"| LogChannel["#agent-log"]
@@ -59,14 +57,14 @@ flowchart TD
 - **All communication happens via Slack**. No direct agent-to-agent API calls.
 - **#commands**: User posts new tasks here.
 - **#agent-orchestrator**: Hermes posts step-by-step plans assigning work to OpenClaw.
-- **#agent-log**: OpenClaw posts execution results in a structured format (`What I Did / What Failed / What Needs Review`).
+- **#agent-log**: OpenClaw posts execution results in a structured format (`What I Did / What's Left / What Needs Your Call`).
 - **#human-review**: Hermes posts the final validated results for human approval.
 
 ### 🤖 Agent Roles & Model Routing
 | Agent | Role | Model | Responsibility |
 |-------|------|-------|----------------|
 | **Hermes** | Orchestrator / Brain | Groq / Llama-3.1-8b-instant | Plans tasks, checks memory & skills, assigns to OpenClaw, validates results. |
-| **OpenClaw** | Execution / Hands | Ollama / Qwen2.5-Coder | Writes code, executes it, pushes results to GitHub, reports status. |
+| **OpenClaw** | Execution / Hands | Ollama / Qwen2.5-Coder | Writes code, executes it, saves outputs, and reports status. |
 
 *Routing Logic:* Hermes uses a strong cloud reasoning model for complex planning and validation. OpenClaw uses a fast, free local coding model for code execution and file manipulation.
 
@@ -78,7 +76,7 @@ What judges should look for:
 
 - **OpenClaw Mastery**
   - [x] User posts a task in #commands
-  - [x] OpenClaw writes/runs code & pushes to Git
+  - [x] OpenClaw writes/runs code & saves outputs
   - [x] Result goes to #agent-log
   - [x] One revision loop is shown (see `agent-log.md`)
   - [x] Status format matches: What I Did / What's Left / What Needs Your Call (see `agent-log.md`)
