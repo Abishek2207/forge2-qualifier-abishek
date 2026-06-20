@@ -1,31 +1,27 @@
-# Forge 2 Edition 1 Qualifier — Abishek R
+# Forge 2 Edition 1 Qualifier
 
-**Submitted by:** Abishek R  
-**Repo:** `forge2-qualifier-abishek`  
-**Goal:** Forge Sprint 02 Starter 1 + Starter 2
+Hi, I'm Abishek R. I built this repository to participate in the Forge 2 Edition 1 qualifier challenge. This project demonstrates a multi-agent system coordinated through Slack to fulfill both the OpenClaw Mastery and Hermes Mastery requirements (Starter 1 and Starter 2).
 
----
+I wanted to keep things straightforward and prove that two specialized AI agents could cooperate over Slack to solve tasks. 
 
-## 🧠 Project Overview
+## How It Works
 
-This repository demonstrates a **production-like multi-agent system** coordinated through **Slack**, built for the Forge 2 Edition 1 qualifier challenge. It satisfies both OpenClaw Mastery and Hermes Mastery requirements.
+I have two agents in this setup:
+1. **Hermes** acts as the orchestrator and brain. It receives tasks, formulates a plan, checks its memory and skills, and delegates work.
+2. **OpenClaw** is the coding agent. It takes instructions from Hermes, generates Python code, runs it locally, and reports the results back to Slack.
 
-Two specialized AI agents cooperate to solve tasks seamlessly over Slack:
-1. **Hermes** (Orchestrator / Brain)
-2. **OpenClaw** (Coding Agent / Execution)
+## Architecture
 
----
-
-## 🏗️ Architecture & Workflow
+Here is how the components communicate:
 
 ```mermaid
 flowchart TD
     User["👤 User (Slack #commands)"] -->|"posts task"| Hermes
 
-    subgraph HermesAgent["🧠 Hermes — Orchestrator (Groq / Kimi K2)"]
+    subgraph HermesAgent["Hermes — Orchestrator"]
         Hermes["Receives task"]
-        Memory["🗃️ Persistent Memory"]
-        Skills["⚡ Skills Loader"]
+        Memory["Persistent Memory"]
+        Skills["Skills Loader"]
         Hermes --> Memory
         Hermes --> Skills
         Hermes -->|"generates plan"| OrchChannel["#agent-orchestrator"]
@@ -33,10 +29,10 @@ flowchart TD
 
     OrchChannel -->|"reads plan"| OpenClaw
 
-    subgraph OpenClawAgent["🦾 OpenClaw — Coding Agent (Ollama / Qwen2.5-Coder)"]
+    subgraph OpenClawAgent["OpenClaw — Coding Agent"]
         OpenClaw["Generates Python code"]
-        Sandbox["▶️ Executes code locally"]
-        Outputs["💾 Saves to outputs/"]
+        Sandbox["Executes code locally"]
+        Outputs["Saves to outputs/"]
         
         OpenClaw --> Sandbox
         Sandbox --> Outputs
@@ -44,7 +40,7 @@ flowchart TD
 
     OpenClaw -->|"posts structured report"| LogChannel["#agent-log"]
 
-    LogChannel -->|"reads report"| HermesValidate["🧠 Hermes — Validator"]
+    LogChannel -->|"reads report"| HermesValidate["Hermes — Validator"]
     
     HermesValidate -->|"Validates result.
     If fail: requests 1 revision.
@@ -53,120 +49,63 @@ flowchart TD
     ReviewChannel -->|"sees final result"| Human["👤 Human Reviewer"]
 ```
 
-### 🗣️ Slack Channel Flow
-- **All communication happens via Slack**. No direct agent-to-agent API calls.
-- **#commands**: User posts new tasks here.
-- **#agent-orchestrator**: Hermes posts step-by-step plans assigning work to OpenClaw.
-- **#agent-log**: OpenClaw posts execution results in a structured format (`What I Did / What's Left / What Needs Your Call`).
-- **#human-review**: Hermes posts the final validated results for human approval.
+## Repository Walkthrough
 
-### 🤖 Agent Roles & Model Routing
-| Agent | Role | Model | Responsibility |
-|-------|------|-------|----------------|
-| **Hermes** | Orchestrator / Brain | Groq / Llama-3.1-8b-instant | Plans tasks, checks memory & skills, assigns to OpenClaw, validates results. |
-| **OpenClaw** | Execution / Hands | Ollama / Qwen2.5-Coder | Writes code, executes it, saves outputs, and reports status. |
+- `README.md`: Architecture, setup instructions, and evaluation checklist.
+- `QUALIFIER_NOTES.md`: My personal notes on building the qualifier, limitations, and manual testing.
+- `EVIDENCE.md`: The mapping of handbook requirements to files and screenshots.
+- `agent-log.md`: A log of the tasks completed, showing the task loop, revision loop, and autonomous runs.
+- `agents/`: The Python scripts for my agents.
+- `memory/`: Contains `hermes_memory.json` which proves Hermes has persistent memory.
+- `skills/`: The folder containing skills like `hello-world` and `forge-status`.
+- `outputs/`: Where OpenClaw saves files after execution (e.g., `results.json`, `autonomous-run.txt`).
+- `screenshots/`: Visual evidence of the Slack workflow.
+- `run_system.py`: The main script to run the agents.
+- `tests/`: Basic validation tests.
 
-*Routing Logic:* Hermes uses a strong cloud reasoning model for complex planning and validation. OpenClaw uses a fast, free local coding model for code execution and file manipulation.
+## Evaluation Checklist
 
----
+I've made sure to hit the following requirements for Starter 1 and Starter 2:
 
-## ✅ Qualifier Evidence Checklist
+- [x] **Task execution**: OpenClaw runs code and saves output.
+- [x] **Revision loop**: Documented in `agent-log.md` (Session 2).
+- [x] **Status reporting**: Formatted as What I Did / What's Left / What Needs Your Call.
+- [x] **Memory**: Hermes uses `memory/hermes_memory.json`.
+- [x] **Skill**: Predefined skills exist in `skills/`.
+- [x] **Plan before action**: Hermes posts plans to `#agent-orchestrator`.
+- [x] **Autonomous run**: Script triggers agent check to generate `autonomous-run.txt`.
 
-What judges should look for:
+## Screenshots Checklist
 
-- **OpenClaw Mastery**
-  - [x] User posts a task in #commands
-  - [x] OpenClaw writes/runs code & saves outputs
-  - [x] Result goes to #agent-log
-  - [x] One revision loop is shown (see `agent-log.md`)
-  - [x] Status format matches: What I Did / What's Left / What Needs Your Call (see `agent-log.md`)
+The `screenshots/` folder contains visual proof for:
+- [x] User posting a task in `#commands`
+- [x] Hermes posting a plan in `#agent-orchestrator`
+- [x] OpenClaw posting a structured status report in `#agent-log`
+- [x] Hermes validating and posting final result in `#human-review`
+- [x] A successful memory retrieval
+- [x] A successful skill trigger
 
-- **Hermes Mastery**
-  - [x] Hermes acts as orchestrator/brain
-  - [x] Persistent memory proof (see `memory/hermes_memory.json`)
-  - [x] SKILL.md proof (see `skills/`)
-  - [x] Plan-before-action proof (Hermes posts plan to `#agent-orchestrator`)
-  - [x] One autonomous/event-style run proof (see `outputs/autonomous-run.txt` and `scripts/autonomous_status.py`)
-
-- **Repo Requirements**
-  - [x] Public GitHub repo
-  - [x] Clean README
-  - [x] `agent-log.md`
-  - [x] Slack evidence (`screenshots/`)
-  - [x] Skills folder (`skills/`)
-  - [x] Memory file (`memory/hermes_memory.json`)
-  - [x] Outputs folder (`outputs/`)
-
----
-
-## 📁 Folder Structure
-
-```
-forge2-qualifier-abishek/
-├── README.md                    ← Architecture, instructions, checklist
-├── run_system.py                ← Main launcher for both agents or demo mode
-├── requirements.txt             ← Python dependencies
-├── .env.example                 ← Safe environment template
-├── agent-log.md                 ← Logs of tasks, revisions, and autonomous runs
-├── agents/                      ← Python agent logic
-├── memory/
-│   └── hermes_memory.json       ← Persistent memory store
-├── outputs/                     ← Generated evidence files
-├── screenshots/                 ← Slack workflow visual evidence
-├── scripts/                     ← Helper scripts (autonomous status, fetcher)
-├── skills/                      ← YAML/Markdown skills (hello-world, forge-status)
-└── tests/
-    └── test_agents.py           ← CI/CD style validation tests
-```
-
----
-
-## ⚙️ Setup & Run Instructions
+## Setup Instructions
 
 ### Prerequisites
 1. Python 3.10+
-2. Slack Workspace with a configured Bot (Bot Token + App-Level Token for Socket Mode).
-3. Groq API Key
-4. Ollama installed locally (`ollama pull qwen2.5-coder`)
-5. GitHub Personal Access Token
+2. A Slack workspace with a Bot Token and App-Level Token.
+3. API keys for the LLMs being used (e.g. Groq).
+4. Local Ollama if using local models (`ollama pull qwen2.5-coder`).
 
-### 1. Installation
+### Installation
 ```bash
 git clone https://github.com/Abishek2207/forge2-qualifier-abishek.git
 cd forge2-qualifier-abishek
 python -m venv .venv
-# Activate venv (Windows: .\.venv\Scripts\Activate.ps1 | Mac/Linux: source .venv/bin/activate)
+# Activate venv
 pip install -r requirements.txt
 ```
 
-### 2. Configuration
-Copy `.env.example` to `.env` and fill in your Slack tokens, Groq key, and GitHub token.
-Ensure Slack channels exist: `#commands`, `#agent-orchestrator`, `#agent-log`, `#human-review`.
+### Configuration
+Copy `.env.example` to `.env` and fill in your keys. Create the necessary Slack channels (`#commands`, `#agent-orchestrator`, `#agent-log`, `#human-review`).
 
-### 3. Run the Agents
+### Run the Agents
 ```bash
 python run_system.py
 ```
-
-### 4. Run CI/CD Validation Tests
-```bash
-pytest tests/
-```
-
-### 5. Generate Autonomous Proofs
-```bash
-python scripts/autonomous_status.py
-python scripts/web_title_fetcher.py
-```
-
----
-
-## 🎥 Demo Commands
-
-To demonstrate the workflow:
-1. In Slack `#commands`, say: `hello`
-   *(Triggers the hello-world skill)*
-2. In Slack `#commands`, say: `what is our forge status?`
-   *(Triggers the forge-status skill)*
-3. In Slack `#commands`, say: `Fetch titles from python.org and groq.com and save to outputs/results.json`
-   *(Triggers the full Hermes → OpenClaw execution loop)*
