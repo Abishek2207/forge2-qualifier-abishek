@@ -1,0 +1,26 @@
+# Forge Sprint 02 — Multi-Agent System Dependencies
+# Install with: pip install -r requirements.txt
+
+# ── Slack Integration ──────────────────────────────────────────────────────────
+slack-bolt>=1.18.0          # Slack Bolt framework (socket mode support)
+slack-sdk>=3.27.0           # Slack Web API client
+
+# ── AI / LLM Providers ────────────────────────────────────────────────────────
+groq>=0.9.0                 # Groq API client (Hermes / Kimi K2)
+openai>=1.30.0              # OpenAI-compatible client (also works with Groq)
+
+# ── HTTP / Web ─────────────────────────────────────────────────────────────────
+requests>=2.31.0            # HTTP requests (web_title_fetcher, health checks)
+
+# ── GitHub Integration ────────────────────────────────────────────────────────
+PyGithub>=2.3.0             # GitHub API client (auto-commit outputs)
+
+# ── Environment & Config ──────────────────────────────────────────────────────
+python-dotenv>=1.0.0        # Load .env file into os.environ
+
+# ── Testing / CI Validation ───────────────────────────────────────────────────
+pytest>=8.2.0               # Test runner
+pytest-timeout>=2.3.0       # Prevent tests from hanging
+
+# ── Utilities ─────────────────────────────────────────────────────────────────
+pyyaml>=6.0.1               # Parse SKILL.md YAML frontmatter

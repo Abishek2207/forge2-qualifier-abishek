@@ -1,0 +1,26 @@
+{
+  "version": "1.0",
+  "agent": "Hermes",
+  "last_updated": null,
+  "facts": {
+    "project": "Forge 2 Edition 1 Qualifier — Sprint 02",
+    "author": "Abishek R",
+    "repo": "Abishek2207/forge2-qualifier-abishek",
+    "stack": {
+      "orchestrator": "Hermes (Groq / Kimi K2)",
+      "coding_agent": "OpenClaw (Ollama / Qwen2.5-Coder)",
+      "communication": "Slack",
+      "version_control": "GitHub"
+    },
+    "slack_channels": {
+      "commands": "#commands",
+      "orchestrator": "#agent-orchestrator",
+      "log": "#agent-log",
+      "review": "#human-review"
+    }
+  },
+  "task_history": [],
+  "active_tasks": {},
+  "skill_triggers_fired": [],
+  "session_count": 0
+}
