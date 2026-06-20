@@ -1,0 +1,15 @@
+{
+  "model": {
+    "provider": "groq",
+    "model": "moonshotai/kimi-k2-instruct",
+    "apiKey": "${GROQ_API_KEY}"
+  },
+  "memory": {
+    "enabled": true,
+    "persistence": "local"
+  },
+  "skills": {
+    "autoLearn": true,
+    "directory": "./skills"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "meta": {
+    "run_at": "2026-06-20T01:35:48.431068+00:00",
+    "agent": "OpenClaw",
+    "model": "Qwen2.5-Coder via Ollama",
+    "script": "scripts/web_title_fetcher.py",
+    "forge": "Forge 2 Edition 1 Qualifier",
+    "author": "Abishek R",
+    "url_count": 3
+  },
+  "results": [
+    {
+      "url": "https://www.python.org",
+      "status_code": 200,
+      "title": "Welcome to Python.org",
+      "error": null
+    },
+    {
+      "url": "https://github.com",
+      "status_code": 200,
+      "title": "GitHub · Change is constant. GitHub keeps you ahead. · GitHub",
+      "error": null
+    },
+    {
+      "url": "https://groq.com",
+      "status_code": 200,
+      "title": "Groq is fast, low cost inference.",
+      "error": null
+    }
+  ]
+}

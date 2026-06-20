@@ -1,0 +1,49 @@
+# .gitignore — Forge 2 Qualifier Submission
+# Abishek R
+
+# ── Python ────────────────────────────────────────────────────────────────────
+# Virtual environment directories — never commit these
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# ── Environment & Secrets ─────────────────────────────────────────────────────
+# CRITICAL: API keys must never be committed to a public repo
+.env
+.env.local
+.env.*.local
+
+# ── OS Files ──────────────────────────────────────────────────────────────────
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+
+# ── Editor / IDE ──────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.suo
+*.swp
+*.swo
+*~
+
+# ── Ollama ────────────────────────────────────────────────────────────────────
+# Ollama model weights are large — store locally, not in git
+*.gguf
+*.ggml
+
+# ── Keep these (outputs are part of qualifier evidence) ───────────────────────
+# outputs/results.json      → DO commit (qualifier evidence)
+# outputs/autonomous-run.txt → DO commit (qualifier evidence)
+# screenshots/*.png          → DO commit after adding them
