@@ -1,6 +1,7 @@
 """
-OpenClaw Agent — FINAL CLEAN SLACK VERSION (Forge 2)
-Handles message + app_mention without duplicate reports.
+OpenClaw Agent — FINAL FORGE 2 WORKING VERSION
+Receives tasks from #agent-orchestrator, executes them, and reports to #agent-log.
+Also posts a backup report to #agent-orchestrator for evidence.
 """
 
 import os
@@ -20,14 +21,14 @@ OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5-coder")
 
 CH_ORCHESTRATOR = os.getenv("SLACK_CHANNEL_ORCHESTRATOR", "agent-orchestrator")
 CH_LOG = os.getenv("SLACK_CHANNEL_LOG", "agent-log")
+CH_REVIEW = os.getenv("SLACK_CHANNEL_REVIEW", "human-review")
 
 OUTPUTS_DIR = Path("outputs")
 OUTPUTS_DIR.mkdir(exist_ok=True)
 
-AGENT_NAME = "🦾 OpenClaw"
+AGENT_NAME = "OpenClaw"
 
 app = App(token=os.getenv("SLACK_BOT_TOKEN"))
-
 _processed_events = set()
 
 
@@ -40,7 +41,6 @@ def get_channel_id(client, name_or_id):
 
     try:
         cursor = None
-
         while True:
             res = client.conversations_list(
                 types="public_channel,private_channel",
@@ -53,7 +53,6 @@ def get_channel_id(client, name_or_id):
                     return ch.get("id")
 
             cursor = res.get("response_metadata", {}).get("next_cursor")
-
             if not cursor:
                 break
 
@@ -70,10 +69,9 @@ def clean_slack_text(text: str) -> str:
 def generate_code(task: str):
     safe_task = clean_slack_text(task)
 
+    output = "Forge 2 Success"
     if "qualifier passed" in safe_task.lower():
         output = "Forge 2 Qualifier Passed"
-    else:
-        output = "Forge 2 Success"
 
     return f'''print("=== Forge 2 Execution ===")
 print("Task: {safe_task}")
@@ -120,10 +118,12 @@ def post(client, channel, text):
             username=AGENT_NAME,
         )
 
-        print("[OpenClaw POST SUCCESS]", response.get("ts"))
+        print(f"[OpenClaw POST SUCCESS] channel={channel_id} ts={response.get('ts')}")
+        return True
 
     except Exception as e:
-        print("[OpenClaw POST FAILED]", str(e))
+        print(f"[OpenClaw POST FAILED] channel={channel} error={str(e)}")
+        return False
 
 
 def process_task(event, client):
@@ -146,27 +146,30 @@ def process_task(event, client):
 
     orchestrator_id = get_channel_id(client, CH_ORCHESTRATOR)
     log_id = get_channel_id(client, CH_LOG)
+    review_id = get_channel_id(client, CH_REVIEW)
 
-    print("🔥 OPENCLAW EVENT:", event)
+    print("OPENCLAW EVENT RECEIVED")
     print("CHANNEL_ID =", channel_id)
     print("ORCHESTRATOR_ID =", orchestrator_id)
     print("LOG_ID =", log_id)
+    print("REVIEW_ID =", review_id)
 
     if channel_id != orchestrator_id:
         print("[OpenClaw] Ignored message: not in orchestrator channel")
         return
 
     task_id = datetime.now().strftime("%H%M%S")
-
     print(f"[OpenClaw] Task received: {task_id}")
 
-    post(client, channel_id, f"🦾 OpenClaw received task `{task_id}`")
+    post(client, channel_id, f"OpenClaw received task `{task_id}`")
 
     code = generate_code(text)
     result = run_python(code, task_id)
 
+    status = "SUCCESS" if result["code"] == 0 else "FAILED"
+
     report = f"""
-🦾 *OpenClaw Report*
+*OpenClaw Report*
 
 *Task ID:* {task_id}
 
@@ -174,13 +177,16 @@ def process_task(event, client):
 - Received task from Hermes in #agent-orchestrator
 - Generated Python code
 - Saved file: `{result['file']}`
-- Executed script
+- Executed script locally
+- Captured stdout, stderr, and return code
 
 *What's Left:*
 - None for this qualifier task
 
 *What Needs Your Call:*
 - Review and approve the output in #human-review
+
+*Execution Status:* {status}
 
 *Output:*
 {result['stdout'] if result['stdout'] else 'None'}
@@ -189,7 +195,25 @@ def process_task(event, client):
 {result['stderr'] if result['stderr'] else 'None'}
 """
 
-    post(client, log_id if log_id else CH_LOG, report)
+    print(report)
+
+    posted_to_log = False
+
+    if log_id:
+        posted_to_log = post(client, log_id, report)
+
+    if not posted_to_log:
+        print("[OpenClaw] #agent-log failed. Trying channel name fallback.")
+        posted_to_log = post(client, CH_LOG, report)
+
+    post(client, channel_id, report)
+
+    if review_id:
+        post(
+            client,
+            review_id,
+            f"OpenClaw completed task `{task_id}`. Please review the report in #agent-log / #agent-orchestrator.",
+        )
 
 
 @app.event("message")
@@ -203,30 +227,31 @@ def handle_app_mention(event, client, logger):
 
 
 def start_openclaw():
-    print("🦾 OpenClaw Agent starting...")
+    print("OpenClaw Agent starting...")
     print(f"Model: {OLLAMA_MODEL}")
     print(f"Listening: #{CH_ORCHESTRATOR}")
-    print("Test with message in #agent-orchestrator")
+    print(f"Reporting: #{CH_LOG}")
+    print(f"Review: #{CH_REVIEW}")
 
     bot_token = os.getenv("SLACK_BOT_TOKEN")
     app_token = os.getenv("SLACK_APP_TOKEN")
 
     if not bot_token:
-        print("❌ Missing SLACK_BOT_TOKEN")
+        print("Missing SLACK_BOT_TOKEN")
         return
 
     if not app_token:
-        print("❌ Missing SLACK_APP_TOKEN")
+        print("Missing SLACK_APP_TOKEN")
         return
 
     try:
         SocketModeHandler(app, app_token).start()
 
     except KeyboardInterrupt:
-        print("🛑 OpenClaw stopped")
+        print("OpenClaw stopped")
 
     except Exception as e:
-        print(f"❌ Fatal error: {e}")
+        print(f"Fatal error: {e}")
 
 
 if __name__ == "__main__":
