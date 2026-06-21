@@ -10,6 +10,8 @@
 
 ---
 
+> **Final Update:** After the walkthrough video was recorded, this repository was updated with a Laravel backend scaffold under `/backend` to fully align with the Forge 2 handbook requirement. The latest GitHub repository state is the source of truth for evaluation.
+
 ## 📖 Submission Summary
 
 Hi, I'm Abishek R. I built this repository to participate in the **Forge 2 Edition 1 Qualifier Challenge**. This project goes beyond the minimum requirements by demonstrating a sophisticated multi-agent system coordinated seamlessly through Slack to fulfill both the **OpenClaw Mastery** and **Hermes Mastery** (Starter 1 and Starter 2). As a capstone, these agents autonomously built a fully functional React Kanban board.

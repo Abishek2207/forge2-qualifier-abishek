@@ -3,6 +3,7 @@
 ## Required Files & Directories
 - [x] `README.md` present
 - [x] `ARCHITECTURE.md` present
+- [x] `EVIDENCE.md` present
 - [x] `agent-log.md` present
 - [x] `slack-export/` present
 - [x] `screenshots/` present

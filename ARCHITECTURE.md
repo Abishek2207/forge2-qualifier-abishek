@@ -5,10 +5,14 @@ The Forge 2 Qualifier multi-agent system is built around a clear separation of c
 ---
 
 ## 🏗️ App Architecture
-The Kanban application structure consists of:
-**React frontend → Laravel REST API → SQLite**
+The application structure consists of:
+- **React/Vite frontend**
+- **Laravel backend scaffold**
+- **SQLite-ready persistence layer**
 
-The backend is included in the `/backend` directory as a Laravel API scaffold, serving as the foundation for the Kanban API.
+**Agents Roles:**
+- **Hermes** = Brain / Orchestrator
+- **OpenClaw** = Hands / Execution Agent
 
 ---
 

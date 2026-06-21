@@ -42,6 +42,16 @@ The following table maps the core hackathon requirements directly to the provide
 
 ---
 
+## 🚀 Final Backend Update
+
+- `backend/` contains Laravel API scaffold
+- `backend/routes/api.php` includes API routes
+- `backend/app/Models` contains Board, BoardList, Card, Tag, Member models
+- `backend/database/migrations` contains SQLite-ready migrations
+- *This was pushed before the final evaluation deadline.*
+
+---
+
 ## 📂 Additional Artifact Proofs
 
 Beyond screenshots, the repository itself serves as hard evidence of the system's capabilities:
