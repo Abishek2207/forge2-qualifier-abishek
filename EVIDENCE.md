@@ -1,36 +1,52 @@
-## Screenshot Evidence
+# 🔍 Evidence & Proofs
 
-| Screenshot                              | Proof                                 |
-| --------------------------------------- | ------------------------------------- |
-| 01-sprint-main-hermes-plan.png          | Hermes receives task and creates plan |
-| 02-agent-orchestrator-openclaw-task.png | Hermes delegates work to OpenClaw     |
-| 03-agent-log-openclaw-report.png        | OpenClaw execution report             |
-| 04-human-review-final.png               | Human review workflow                 |
-| 05-terminal-openclaw-success.png        | OpenClaw running successfully         |
-| 06-hermes-terminal-success.png          | Hermes running successfully           |
-| 08-kanban-live-url.png                  | Live Kanban application               |
-| 08b-card-creation-feature.png           | Card creation feature                 |
-| 09-memory-and-status-proof.png          | Hermes memory recall and status proof |
-| 10-agent-log-md.png                     | Agent log repository proof            |
-| 11-github-repo-home.png                 | Public GitHub repository              |
-| 12-tests-passed.png                     | Test execution proof                  |
-| 13-readme.png                           | README documentation proof            |
-| 14-final-push.png                       | Final Git push confirmation           |
+This document serves as the central directory for all visual and technical proof required for the Forge 2 Edition 1 Qualifier. All screenshot files referenced below can be found in the `screenshots/` directory.
 
-## Qualification Coverage
+---
 
-Starter 1 (OpenClaw) → Proven via screenshots 02, 03, 05
+## 📸 Screenshot Evidence Matrix
 
-Starter 2 (Hermes) → Proven via screenshots 01, 06, 09
+| Reference File | Feature Demonstrated |
+|----------------|----------------------|
+| `01-sprint-main-hermes-plan.png` | **Hermes Planning:** Hermes receives task and creates the architectural plan. |
+| `02-agent-orchestrator-openclaw-task.png` | **Orchestration:** Hermes successfully delegates the technical execution to OpenClaw. |
+| `03-agent-log-openclaw-report.png` | **OpenClaw Execution:** OpenClaw executes code and generates a structured status report. |
+| `04-human-review-final.png` | **Human Review:** The built-in workflow pause for human validation. |
+| `05-terminal-openclaw-success.png` | **Local Execution:** OpenClaw successfully running and executing Python securely. |
+| `06-hermes-terminal-success.png` | **Agent Health:** Hermes system booting and running successfully. |
+| `08-kanban-live-url.png` | **Deployment:** The live React+Vite Kanban application built by the agents. |
+| `08b-card-creation-feature.png` | **Functionality:** Proof of Kanban board features (card creation, tags, members). |
+| `09-memory-and-status-proof.png` | **Memory Recall:** Hermes demonstrating persistent memory recall capabilities. |
+| `10-agent-log-md.png` | **Documentation:** Proof of the generated `agent-log.md` tracking mechanism. |
+| `11-github-repo-home.png` | **Repository:** The public GitHub repository. |
+| `12-tests-passed.png` | **Testing:** Successful execution of the Pytest suite (6/6 passing). |
+| `13-readme.png` | **Documentation:** The highly structured, professional README documentation. |
+| `14-final-push.png` | **Version Control:** Final Git push confirmation. |
 
-Slack Workflow → Proven via screenshots 01–04
+---
 
-Memory → Proven via screenshot 09
+## 🏆 Qualification Coverage Table
 
-Kanban Application → Proven via screenshots 08 and 08b
+The following table maps the core hackathon requirements directly to the provided evidence:
 
-Testing → Proven via screenshot 12
+| Mastery Requirement | Status | Primary Proof Reference |
+|---------------------|--------|--------------------------|
+| **Starter 1 (OpenClaw)** | ✅ Verified | Screenshots `02`, `03`, `05`, `10` |
+| **Starter 2 (Hermes)** | ✅ Verified | Screenshots `01`, `06`, `09` |
+| **Slack Workflow Coordination** | ✅ Verified | Screenshots `01`, `02`, `03`, `04` |
+| **Persistent Memory** | ✅ Verified | Screenshot `09`, `memory/hermes_memory.json` |
+| **Kanban Application (Build)** | ✅ Verified | Screenshots `08`, `08b`, `frontend/` dir |
+| **Live Deployment** | ✅ Verified | Screenshot `08`, [Vercel URL](https://forge2-kanban-abishek.vercel.app) |
+| **Automated Testing** | ✅ Verified | Screenshot `12`, `pytest tests/` |
+| **Documentation & Logging** | ✅ Verified | Screenshots `10`, `11`, `13`, `agent-log.md` |
 
-Documentation → Proven via screenshots 10, 11, 13
+---
 
-Deployment → Proven via screenshot 08
+## 📂 Additional Artifact Proofs
+
+Beyond screenshots, the repository itself serves as hard evidence of the system's capabilities:
+
+1. **`agent-log.md`**: Contains the full transcript of OpenClaw's execution loops and Hermes' revision requests.
+2. **`memory/hermes_memory.json`**: Contains the serialized memory state of the Hermes agent.
+3. **`outputs/` directory**: Contains the physical artifacts and raw code generated by OpenClaw during its sandbox execution.
+4. **`skills/` directory**: Contains the `.md` files that dictate the tools and behaviors available to the agents.
