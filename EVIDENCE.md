@@ -43,12 +43,11 @@ The following table maps the core hackathon requirements directly to the provide
 ---
 
 ## Final Backend Evidence
-
 - `backend/README.md` documents backend run instructions.
 - `backend/routes/api.php` contains API route definitions.
 - `backend/app/Models/` contains Board, BoardList, Card, Tag, and Member models.
 - `backend/database/migrations/` contains SQLite-ready migrations.
-- Backend scaffold was pushed before the final evaluation deadline.
+- `screenshots/15-backend-folder-proof.png` shows backend folder proof.
 
 ---
 
