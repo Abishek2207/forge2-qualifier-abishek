@@ -3,7 +3,7 @@
 Hi, I'm Abishek R. I built this repository to participate in the Forge 2 Edition 1 qualifier challenge. This project demonstrates a multi-agent system coordinated through Slack to fulfill both the OpenClaw Mastery and Hermes Mastery requirements (Starter 1 and Starter 2), as well as a full React Kanban board built by the agents.
 
 ## Live Application
-**Live URL**: `[INSERT_VERCEL_LIVE_URL_HERE]`
+**Live URL**: '(https://forge2-kanban-abishek.vercel.app)`
 
 ## Architecture & Roles
 
