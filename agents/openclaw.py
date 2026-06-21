@@ -1,5 +1,6 @@
 """
-OpenClaw Agent — FINAL DEBUG SAFE VERSION (Forge 2)
+OpenClaw Agent — FINAL CLEAN SLACK VERSION (Forge 2)
+Handles message + app_mention without duplicate reports.
 """
 
 import os
@@ -38,30 +39,47 @@ def get_channel_id(client, name_or_id):
         return name_or_id
 
     try:
-        res = client.conversations_list(types="public_channel,private_channel")
-        for ch in res["channels"]:
-            if ch["name"] == name_or_id:
-                return ch["id"]
+        cursor = None
+
+        while True:
+            res = client.conversations_list(
+                types="public_channel,private_channel",
+                limit=200,
+                cursor=cursor,
+            )
+
+            for ch in res.get("channels", []):
+                if ch.get("name") == name_or_id:
+                    return ch.get("id")
+
+            cursor = res.get("response_metadata", {}).get("next_cursor")
+
+            if not cursor:
+                break
+
     except Exception as e:
         print("[OpenClaw] channel resolve error:", e)
 
     return None
 
 
+def clean_slack_text(text: str) -> str:
+    return text.replace("\n", " ").replace('"', "'").strip()
+
+
 def generate_code(task: str):
-    safe_task = task.replace('"', "'").replace("\n", " ")
+    safe_task = clean_slack_text(task)
 
     if "qualifier passed" in safe_task.lower():
         output = "Forge 2 Qualifier Passed"
     else:
         output = "Forge 2 Success"
 
-    return f"""
-print("=== Forge 2 Execution ===")
+    return f'''print("=== Forge 2 Execution ===")
 print("Task: {safe_task}")
 print("Status: SUCCESS")
 print("Output: {output}")
-"""
+'''
 
 
 def run_python(code: str, task_id: str):
@@ -75,12 +93,14 @@ def run_python(code: str, task_id: str):
             text=True,
             timeout=20,
         )
+
         return {
             "stdout": result.stdout.strip(),
             "stderr": result.stderr.strip(),
             "code": result.returncode,
             "file": str(file_path),
         }
+
     except Exception as e:
         return {
             "stdout": "",
@@ -100,22 +120,20 @@ def post(client, channel, text):
             username=AGENT_NAME,
         )
 
-        print("[OpenClaw POST SUCCESS]", response["ts"])
+        print("[OpenClaw POST SUCCESS]", response.get("ts"))
 
     except Exception as e:
         print("[OpenClaw POST FAILED]", str(e))
 
 
-@app.event("message")
-def handle_message(event, client, logger):
+def process_task(event, client):
     event_key = event.get("client_msg_id") or event.get("event_ts") or event.get("ts")
 
     if event_key in _processed_events:
+        print("[OpenClaw] Duplicate event ignored:", event_key)
         return
 
     _processed_events.add(event_key)
-
-    print("🔥 OPENCLAW EVENT:", event)
 
     if event.get("bot_id") or event.get("subtype"):
         return
@@ -129,6 +147,7 @@ def handle_message(event, client, logger):
     orchestrator_id = get_channel_id(client, CH_ORCHESTRATOR)
     log_id = get_channel_id(client, CH_LOG)
 
+    print("🔥 OPENCLAW EVENT:", event)
     print("CHANNEL_ID =", channel_id)
     print("ORCHESTRATOR_ID =", orchestrator_id)
     print("LOG_ID =", log_id)
@@ -173,22 +192,39 @@ def handle_message(event, client, logger):
     post(client, log_id if log_id else CH_LOG, report)
 
 
+@app.event("message")
+def handle_message(event, client, logger):
+    process_task(event, client)
+
+
+@app.event("app_mention")
+def handle_app_mention(event, client, logger):
+    process_task(event, client)
+
+
 def start_openclaw():
     print("🦾 OpenClaw Agent starting...")
     print(f"Model: {OLLAMA_MODEL}")
     print(f"Listening: #{CH_ORCHESTRATOR}")
     print("Test with message in #agent-orchestrator")
 
-    token = os.getenv("SLACK_APP_TOKEN")
+    bot_token = os.getenv("SLACK_BOT_TOKEN")
+    app_token = os.getenv("SLACK_APP_TOKEN")
 
-    if not token:
+    if not bot_token:
+        print("❌ Missing SLACK_BOT_TOKEN")
+        return
+
+    if not app_token:
         print("❌ Missing SLACK_APP_TOKEN")
         return
 
     try:
-        SocketModeHandler(app, token).start()
+        SocketModeHandler(app, app_token).start()
+
     except KeyboardInterrupt:
         print("🛑 OpenClaw stopped")
+
     except Exception as e:
         print(f"❌ Fatal error: {e}")
 

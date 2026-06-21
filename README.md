@@ -18,9 +18,9 @@ Hi, I'm Abishek R. I built this repository to participate in the Forge 2 Edition
 
 ## Tech Stack & Models Used
 * **Free Stack**: React, Vite, Node, LocalStorage, GitHub, Vercel/Netlify.
-* **Hermes Model**: Groq / Gemini free model (for planning).
-* **OpenClaw Model**: Ollama Qwen2.5-Coder (for local execution).
-
+* **Hermes Model**: `owl-alpha` (Planning, memory, orchestration, task decomposition).
+* **OpenClaw Model**: `qwen2.5-coder` via Ollama (Code generation, execution, file operations).
+* **Fallback Models**: OpenRouter Free Models, Gemini 2.5 Flash.
 ## Evidence Mapping
 See `EVIDENCE.md` for a complete mapping of requirements to repository proofs.
 

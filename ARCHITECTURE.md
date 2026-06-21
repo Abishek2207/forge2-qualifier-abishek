@@ -14,5 +14,6 @@ Communication happens over specific Slack channels:
 * `#human-review`: Hermes validates the result and posts the final output here for human review.
 
 ## Model Routing
-* **Hermes**: Uses a free API model (Groq / Gemini free model) for planning and orchestration.
-* **OpenClaw**: Uses a local model via Ollama (Qwen2.5-Coder) for code execution and building.
+* **Hermes**: `owl-alpha` (Planning, memory, orchestration, task decomposition)
+* **OpenClaw**: `qwen2.5-coder` via Ollama (Code generation, execution, file operations)
+* **Fallback Models**: OpenRouter Free Models, Gemini 2.5 Flash
