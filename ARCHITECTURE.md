@@ -5,14 +5,17 @@ The Forge 2 Qualifier multi-agent system is built around a clear separation of c
 ---
 
 ## 🏗️ App Architecture
-The application structure consists of:
-- **React/Vite frontend**
-- **Laravel backend scaffold**
-- **SQLite-ready persistence layer**
 
-**Agents Roles:**
-- **Hermes** = Brain / Orchestrator
-- **OpenClaw** = Hands / Execution Agent
+**Flow:**
+`User → Slack → Hermes → OpenClaw → Laravel Backend Scaffold + React Frontend → Human Review`
+
+**Components:**
+- **Frontend**: React/Vite app deployed on Vercel.
+- **Backend**: Included as a Laravel scaffold under `/backend` with an SQLite-ready persistence layer.
+
+**Agents:**
+- **Hermes** = Brain / Orchestrator.
+- **OpenClaw** = Hands / Execution Agent.
 
 ---
 

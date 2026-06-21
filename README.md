@@ -10,7 +10,11 @@
 
 ---
 
-> **Final Update:** After the walkthrough video was recorded, this repository was updated with a Laravel backend scaffold under `/backend` to fully align with the Forge 2 handbook requirement. The latest GitHub repository state is the source of truth for evaluation.
+## Final Submission Note
+
+This repository was updated before the final evaluation deadline to include a Laravel backend scaffold under `/backend` in addition to the deployed React/Vite frontend.
+
+The walkthrough video may show the earlier repository state, but the latest GitHub repository represents the final submission state and should be considered the source of truth for evaluation.
 
 ## 📖 Submission Summary
 
@@ -28,6 +32,8 @@ To evaluate this submission in under 2 minutes:
 4. **Review Skills**: Inspect `SKILL.md` and the `skills/` directory for predefined agent capabilities.
 5. **Run Tests**: Execute `pytest tests/` to verify project structure (6/6 passing).
 6. **Start Agents**: Run `python run_system.py` to launch Hermes and OpenClaw locally.
+7. **Review Backend**: Review `backend/` for Laravel API scaffold, routes, models, and SQLite-ready migrations.
+8. **Review Slack**: Review `slack-export/` for exported Slack workspace evidence.
 
 ---
 
@@ -91,8 +97,8 @@ graph TD
 
 To demonstrate the power of the agents, they were tasked with building a tiny Trello-style Kanban board. 
 
-**Frontend:** Located in the `frontend/` directory. It is a React + Vite application deployed on Vercel.
-**Backend:** Located in the `backend/` directory. It contains a Laravel API scaffold with SQLite readiness. It can run locally.
+- **Frontend**: React/Vite app in `frontend/`, deployed on Vercel.
+- **Backend**: Laravel API scaffold in `backend/`, SQLite-ready, runnable locally.
 
 **Features Implemented:**
 - [x] Board and List management (To Do, Doing, Done)
