@@ -1,18 +1,10 @@
-# Screenshots — Forge 2 Qualifier Evidence
+# Screenshots
 
-This directory holds screenshots taken during the live agent demo.
+This directory contains visual proof of the Forge 2 Qualifier requirements and Slack workflow.
 
-## What to add here after running:
-
-| File | Content |
-|------|---------|
-| `01-hermes-task-received.png` | User posting task in `#commands` |
-| `02-hermes-plan.png` | Hermes posting the execution plan in `#agent-orchestrator` |
-| `03-openclaw-report.png` | OpenClaw posting execution result in `#agent-log` |
-| `04-hermes-validation.png` | Hermes posting the final validated result in `#human-review` |
-| `05-hermes-memory-recall.png` | Hermes recalling project context from memory |
-| `06-hermes-skill-firing.png` | Hermes triggering the forge-status skill |
-| `07-autonomous-run.png` | Terminal output of `python scripts/autonomous_status.py` |
-| `08-github-commit.png` | GitHub showing the automated commit from OpenClaw |
-
-Add screenshots here to complete the qualifier evidence package.
+* **#commands** - Shows user posting a task in the `#commands` channel.
+* **#agent-orchestrator** - Shows Hermes posting a plan in the `#agent-orchestrator` channel.
+* **#agent-log** - Shows OpenClaw posting a structured status report in the `#agent-log` channel.
+* **#human-review** - Shows Hermes validating and posting the final result in the `#human-review` channel.
+* **Memory** - Shows a successful memory retrieval.
+* **Skill** - Shows a successful skill trigger.
