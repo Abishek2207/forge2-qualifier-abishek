@@ -87,7 +87,10 @@ graph TD
 
 ## 📌 Kanban Application
 
-To demonstrate the power of the agents, they were tasked with building a tiny Trello-style Kanban board located in the `frontend/` directory.
+To demonstrate the power of the agents, they were tasked with building a tiny Trello-style Kanban board. 
+
+**Frontend:** Located in the `frontend/` directory. It is a React + Vite application deployed on Vercel.
+**Backend:** Located in the `backend/` directory. It contains a Laravel API scaffold with SQLite readiness. It can run locally.
 
 **Features Implemented:**
 - [x] Board and List management (To Do, Doing, Done)
@@ -118,6 +121,7 @@ pytest tests/
 ```text
 forge2-qualifier-abishek/
 ├── agents/                 # Hermes and OpenClaw logic
+├── backend/                # Laravel API scaffold
 ├── frontend/               # React+Vite Kanban application
 ├── memory/                 # Persistent state (hermes_memory.json)
 ├── screenshots/            # Visual proofs of Slack workflow

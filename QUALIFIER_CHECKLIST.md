@@ -1,5 +1,17 @@
 # Forge 2 Qualifier Checklist
 
+## Required Files & Directories
+- [x] `README.md` present
+- [x] `ARCHITECTURE.md` present
+- [x] `agent-log.md` present
+- [x] `slack-export/` present
+- [x] `screenshots/` present
+- [x] `skills/` present
+- [x] `backend/` Laravel present
+- [x] `frontend/` React present
+- [x] `.env.example` present
+- [x] Live URL present
+
 ## Agent Features
 - [x] **Task execution**: OpenClaw loop documented in `agent-log.md`
 - [x] **Memory**: Hermes uses `memory/hermes_memory.json`
