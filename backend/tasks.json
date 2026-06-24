@@ -1,23 +1,23 @@
 [
   {
-    "id": "d76766b5-cc48-4d9c-ae2b-031683cfaca5",
+    "id": "seed-001",
     "title": "Design system architecture",
     "status": "done",
-    "createdAt": "2026-06-24T15:58:31.870Z",
-    "updatedAt": "2026-06-24T15:58:43.978Z"
+    "createdAt": "2026-06-24T00:00:00.000Z",
+    "updatedAt": "2026-06-24T16:09:33.293Z"
   },
   {
-    "id": "ecc558e4-2f64-4f82-819b-2d7097097417",
+    "id": "seed-002",
     "title": "Set up CI/CD pipeline",
     "status": "done",
-    "createdAt": "2026-06-24T15:58:31.875Z",
-    "updatedAt": "2026-06-24T15:58:53.045Z"
+    "createdAt": "2026-06-24T00:00:01.000Z",
+    "updatedAt": "2026-06-24T16:09:43.375Z"
   },
   {
-    "id": "50b3f37b-6757-45ad-b844-3c096ea883fb",
+    "id": "seed-003",
     "title": "Write API documentation",
     "status": "done",
-    "createdAt": "2026-06-24T15:58:31.875Z",
-    "updatedAt": "2026-06-24T15:59:03.113Z"
+    "createdAt": "2026-06-24T00:00:02.000Z",
+    "updatedAt": "2026-06-24T16:09:53.445Z"
   }
 ]
