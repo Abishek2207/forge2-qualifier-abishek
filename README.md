@@ -1,178 +1,96 @@
-<div align="center">
-  <h1>🚀 Forge 2 Edition 1 Qualifier</h1>
-  <p><strong>A Next-Generation Multi-Agent System Coordinated via Slack</strong></p>
-  <p>
-    <a href="https://forge2-kanban-abishek.vercel.app"><b>Live Kanban Application</b></a> •
-    <a href="#-judge-quick-start"><b>Judge Quick Start</b></a> •
-    <a href="EVIDENCE.md"><b>Evidence & Proofs</b></a>
-  </p>
-</div>
+# AI Kanban Agent System
+
+A full-stack, production-ready AI-powered Kanban board with simulated Hermes (planner) and OpenClaw (executor) agents.
 
 ---
 
-## Final Submission Note
-This repository was updated to fully implement a **Node.js + Express** backend, serving the deployed React/Vite frontend (with zero `localStorage` usage, as per constraints).
+## Project Structure
 
-The walkthrough video may show an earlier repository state (Laravel scaffold), but the latest GitHub repository is the source of truth for evaluation.
-
-## 📖 Submission Summary
-
-Hi, I'm Abishek R. I built this repository to participate in the **Forge 2 Edition 1 Qualifier Challenge**. This project goes beyond the minimum requirements by demonstrating a sophisticated multi-agent system coordinated seamlessly through Slack to fulfill both the **OpenClaw Mastery** and **Hermes Mastery** (Starter 1 and Starter 2). As a capstone, these agents autonomously built a fully functional React Kanban board.
-
----
-
-## 🚀 Judge Quick Start
-
-To evaluate this submission in under 2 minutes:
-
-1. **Open Live URL**: [Live Kanban Application](https://forge2-kanban-abishek.vercel.app)
-2. **View Screenshots**: Browse the `screenshots/` folder for visual Slack workflow proofs.
-3. **Read Execution Logs**: Review `agent-log.md` for the documented execution loops.
-4. **Review Skills**: Inspect `SKILL.md` and the `skills/` directory for predefined agent capabilities.
-5. **Run Tests**: Execute `pytest tests/` to verify project structure (6/6 passing).
-6. **Start Agents**: Run `python run_system.py` to launch Hermes and OpenClaw locally.
-7. **Review Backend**: Review `backend/` for the Node.js Express REST API (using an in-memory DB structured like SQLite).
-8. **Review Slack**: Review `slack-export/` for exported Slack workspace evidence.
-
----
-
-## ✨ Project Highlights & Feature Matrix
-
-| Feature | Description |
-|---------|-------------|
-| 🧠 **Multi-Agent Architecture** | **Hermes** (Orchestrator) and **OpenClaw** (Coder) working in tandem to solve complex tasks. |
-| 💬 **Slack Orchestration** | Complete task delegation, execution reporting, and validation within Slack channels. |
-| 💾 **Persistent Memory** | Hermes remembers past contexts, user preferences, and historical constraints. |
-| ⚡ **Local Code Execution** | OpenClaw securely generates, writes, and executes code locally with output capture. |
-| 🛡️ **Human Review Workflow** | Built-in checkpoints for human validation before final delivery to `#human-review`. |
-| 📋 **Live Kanban App** | A functional React + Vite Kanban app with drag-and-drop, entirely built by the agents. |
-| 🔓 **Open-Source Models** | Utilizing state-of-the-art open-weight and free models (Owl-Alpha, Qwen2.5-Coder). |
-
----
-
-## 🏗️ Architecture & Model Routing
-
-```mermaid
-graph TD
-    User((User)) -->|"Posts task"| SprintMain["#sprint-main / #commands"]
-    SprintMain --> Hermes["🧠 Hermes (Planner)"]
-    Hermes -->|"Generates plan"| AgentOrchestrator["#agent-orchestrator"]
-    AgentOrchestrator --> OpenClaw["💻 OpenClaw (Coder)"]
-    OpenClaw -->|"Executes & reports"| AgentLog["#agent-log"]
-    AgentLog --> HermesValidation["🔍 Hermes Validation"]
-    HermesValidation -->|"Final approval"| HumanReview["#human-review"]
-
-    classDef slack fill:#4A154B,stroke:#fff,stroke-width:2px,color:#fff;
-    classDef agent fill:#0f4c75,stroke:#fff,stroke-width:2px,color:#fff;
-    
-    class SprintMain,AgentOrchestrator,AgentLog,HumanReview slack;
-    class Hermes,OpenClaw,HermesValidation agent;
 ```
-
-**Model Routing Allocation:**
-* **Hermes (Brain)**: `owl-alpha` for planning, memory management, orchestration, and task decomposition.
-* **OpenClaw (Hands)**: `qwen2.5-coder` (via Ollama) for code generation, execution, and file operations.
-* **Fallback Models**: OpenRouter Free Models, Gemini 2.5 Flash.
-
-*(See [ARCHITECTURE.md](ARCHITECTURE.md) for deeper technical specifications).*
-
----
-
-## 📋 Qualifier Requirements Mapping
-
-| Requirement | Proof Location | Status |
-|-------------|----------------|--------|
-| **Starter 1 – OpenClaw** | Slack execution loop (`screenshots/`, `agent-log.md`) | ✅ Passed |
-| **Starter 2 – Hermes** | Planning + memory recall (`memory/hermes_memory.json`) | ✅ Passed |
-| **Coding Agent** | OpenClaw structured reports in `#agent-log` | ✅ Passed |
-| **Orchestration** | Hermes planning in `#agent-orchestrator` | ✅ Passed |
-| **Human Review** | `#human-review` screenshots | ✅ Passed |
-| **Deployment** | [Vercel Live URL](https://forge2-kanban-abishek.vercel.app) | ✅ Passed |
-| **Testing** | `pytest tests/` (6/6 passed) | ✅ Passed |
-
----
-
-## 📌 Kanban Application
-
-To demonstrate the power of the agents, they were tasked with building a tiny Trello-style Kanban board. 
-
-- **Frontend**: React/Vite app in `frontend/`, deployed on Vercel.
-- **Backend**: Node.js + Express REST API in `backend/`, in-memory DB structured like production, runnable locally.
-
-**Features Implemented:**
-- [x] Board and List management (To Do, Doing, Done)
-- [x] Drag & Drop capability for cards across lists
-- [x] Card title and description editing
-- [x] Colored tags/labels and Member assignment
-- [x] Due dates with overdue visual flags
-
----
-
-## 🚀 Deployment & Testing
-
-**Deployment Strategy**: 
-The Kanban application is deployed as a standalone Single Page Application (SPA) on Vercel. 
-* **Live Link**: [https://forge2-kanban-abishek.vercel.app](https://forge2-kanban-abishek.vercel.app)
-
-**Testing Suite**:
-Automated tests are included to verify the integrity of the generated application and the required evidence documentation.
-```bash
-pytest tests/
-# Output: 6 passed in 0.05s
-```
-
----
-
-## 📂 Repository Structure
-
-```text
 forge2-qualifier-abishek/
-├── agents/                 # Hermes and OpenClaw logic
-├── backend/                # Laravel API scaffold
-├── frontend/               # React+Vite Kanban application
-├── memory/                 # Persistent state (hermes_memory.json)
-├── screenshots/            # Visual proofs of Slack workflow
-├── skills/                 # Predefined agent capabilities
-├── tests/                  # Pytest verification suite
-├── ARCHITECTURE.md         # Detailed architectural documentation
-├── EVIDENCE.md             # Comprehensive evidence mapping
-├── README.md               # You are here
-├── SKILL.md                # Skill documentation
-├── agent-log.md            # Documented agent execution loops
-└── run_system.py           # Main entry point to launch the system
+├── backend/
+│   ├── server.js       ← Express server + CRUD + Cron agent
+│   └── package.json
+└── frontend/
+    ├── index.html
+    ├── vite.config.js
+    ├── package.json
+    └── src/
+        ├── main.jsx
+        ├── App.jsx
+        └── index.css
 ```
 
 ---
 
-## 💻 How to Run Locally
+## Quick Start
 
-### Prerequisites
-1. Python 3.10+
-2. Node.js 18+
-3. A Slack workspace with a Bot Token and App-Level Token.
-4. Local Ollama (`ollama pull qwen2.5-coder`).
+### 1. Backend
 
-### Installation & Agent Setup
 ```bash
-git clone https://github.com/Abishek2207/forge2-qualifier-abishek.git
-cd forge2-qualifier-abishek
-
-python -m venv .venv
-# Activate venv (Windows: .venv\Scripts\activate, Mac/Linux: source .venv/bin/activate)
-pip install -r requirements.txt
-
-# Copy configuration
-cp .env.example .env
-# Fill in your keys and create Slack channels
-
-# Launch the orchestrator
-python run_system.py
+cd backend
+npm install
+npm start
 ```
 
-### Run the Frontend
+Backend starts on **http://localhost:3000**
+
+### 2. Frontend (separate terminal)
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-Open `http://localhost:5173` to interact with the Kanban board locally.
+
+Frontend starts on **http://localhost:5173**
+
+---
+
+## API Reference
+
+| Method | Endpoint      | Body                        | Description        |
+|--------|---------------|-----------------------------|--------------------|
+| GET    | /tasks        | —                           | List all tasks     |
+| POST   | /tasks        | `{ title: string }`        | Create task        |
+| PATCH  | /tasks/:id    | `{ status?, title? }`      | Update task        |
+| DELETE | /tasks/:id    | —                           | Delete task        |
+| GET    | /health       | —                           | Health check       |
+
+Valid statuses: `todo` · `in-progress` · `done`
+
+---
+
+## Agent Behavior
+
+The cron job fires every **10 seconds**:
+
+1. **HERMES** picks a random `todo` task and plans execution.
+2. **OPENCLAW** moves it to `in-progress` immediately.
+3. After **3 seconds**, task is marked `done`.
+
+Console output example:
+```
+[HERMES]    Task selected  → "Design system architecture" (id: abc-123)
+[HERMES]    Plan           → Mark in-progress → execute → mark done
+[OPENCLAW]  Executing task → "Design system architecture"
+[OPENCLAW]  Status changed → in-progress
+[OPENCLAW]  Task finished  → "Design system architecture"
+[RESULT]    "Design system architecture" completed successfully ✅
+```
+
+---
+
+## Deployment
+
+### Backend → Render
+
+1. Push `backend/` to a GitHub repo.
+2. New Web Service → Build command: `npm install` → Start command: `npm start`.
+3. Set `PORT` env var if needed (defaults to 3000).
+
+### Frontend → Vercel
+
+1. Push `frontend/` to a GitHub repo.
+2. Import in Vercel → Framework: Vite → Build: `npm run build` → Output: `dist`.
+3. Update `const API = "https://your-render-backend.onrender.com"` in `App.jsx` before deploying.
