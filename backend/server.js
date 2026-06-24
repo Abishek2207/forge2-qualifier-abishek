@@ -357,10 +357,14 @@ cron.schedule("*/10 * * * * *", () => {
 // Start Server
 // ─────────────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
+  const displayUrl = process.env.NODE_ENV === "production"
+    ? "https://forge2-qualifier-abishek.onrender.com"
+    : `http://localhost:${PORT}`;
+
   console.log("");
   console.log("╔══════════════════════════════════════════════════╗");
   console.log("║     AI Kanban Agent System  v2.0  — ONLINE       ║");
-  console.log(`║     http://localhost:${PORT}                        ║`);
+  console.log(`║     ${displayUrl.padEnd(44)} ║`);
   console.log("║     Database : tasks.json (file-based)           ║");
   console.log("║     Agents   : Hermes (planner) + OpenClaw (exec)║");
   console.log("║     Cron     : every 10 seconds                  ║");

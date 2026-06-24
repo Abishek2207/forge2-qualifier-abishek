@@ -1,17 +1,10 @@
 [
   {
-    "id": "seed-001",
-    "title": "Design system architecture",
-    "status": "done",
-    "createdAt": "2026-06-24T00:00:00.000Z",
-    "updatedAt": "2026-06-24T16:09:33.293Z"
-  },
-  {
     "id": "seed-002",
     "title": "Set up CI/CD pipeline",
     "status": "done",
     "createdAt": "2026-06-24T00:00:01.000Z",
-    "updatedAt": "2026-06-24T16:09:43.375Z"
+    "updatedAt": "2026-06-24T16:26:06.683Z"
   },
   {
     "id": "seed-003",

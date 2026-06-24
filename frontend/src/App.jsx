@@ -272,7 +272,7 @@ export default function App() {
         <div className="center-screen">
           <div className="error-box">
             <h2>⚠ Connection Error</h2>
-            <p>Cannot reach backend at <code>http://localhost:3000</code></p>
+            <p>Cannot reach backend at <code>{API}</code></p>
             <p style={{ marginTop: 6 }}>{error}</p>
             <button className="retry-btn" onClick={fetchTasks}>Retry</button>
           </div>
