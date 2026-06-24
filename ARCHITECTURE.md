@@ -7,11 +7,11 @@ The Forge 2 Qualifier multi-agent system is built around a clear separation of c
 ## 🏗️ App Architecture
 
 **Flow:**
-`User → Slack → Hermes → OpenClaw → React Frontend + Laravel Backend Scaffold → Agent Log → Human Review`
+`User → Slack → Hermes → OpenClaw → React Frontend + Node.js Backend → Agent Log → Human Review`
 
 **Components:**
 - **Frontend**: React/Vite deployed on Vercel
-- **Backend**: Laravel scaffold under `/backend`, SQLite-ready, local-run only
+- **Backend**: Node.js + Express under `/backend`, in-memory DB, local-run only
 
 **Agents:**
 - **Hermes** = Brain / Orchestrator

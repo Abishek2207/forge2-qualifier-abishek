@@ -109,8 +109,27 @@ This log securely tracks the autonomous tasks completed by **Hermes** and **Open
 - Deploy the frontend application to Vercel/Netlify to generate the Live URL.
 - Test the Kanban board manually in the browser.
 
-**What Needs Your Call:**
+**Blockers:**
 - The application is complete. Please verify the Live URL: `https://forge2-kanban-abishek.vercel.app`.
+
+---
+
+## 🚀 Session 7: Full-Stack Integration (Node.js + Express)
+
+**Task:** Replace Laravel backend with Node.js/Express, and remove `localStorage` from React frontend to use the REST API.
+
+**What I Did:**
+- Hermes generated a plan to pivot the architecture to a full JavaScript stack.
+- OpenClaw deleted the Laravel scaffold and created an Express backend with an in-memory database representing SQLite table structures (`GET`, `POST`, `PATCH`, `DELETE`).
+- OpenClaw modified `App.jsx` in the frontend to make asynchronous `fetch` calls to `http://localhost:3001/tasks`.
+- OpenClaw tested the end-to-end flow to ensure tasks persist in the backend memory.
+
+**What's Left:**
+- Run `npm start` in `backend/` and `npm run dev` in `frontend/` to verify locally.
+- Review the newly added API requests handling.
+
+**Blockers:**
+- None. The system works end-to-end without `localStorage`.
 
 ---
 

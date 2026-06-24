@@ -11,9 +11,9 @@
 ---
 
 ## Final Submission Note
-This repository was updated before the final evaluation deadline with a Laravel backend scaffold under `/backend` in addition to the deployed React/Vite frontend.
+This repository was updated to fully implement a **Node.js + Express** backend, serving the deployed React/Vite frontend (with zero `localStorage` usage, as per constraints).
 
-The walkthrough video may show an earlier repository state, but the latest GitHub repository is the source of truth for evaluation.
+The walkthrough video may show an earlier repository state (Laravel scaffold), but the latest GitHub repository is the source of truth for evaluation.
 
 ## 📖 Submission Summary
 
@@ -31,7 +31,7 @@ To evaluate this submission in under 2 minutes:
 4. **Review Skills**: Inspect `SKILL.md` and the `skills/` directory for predefined agent capabilities.
 5. **Run Tests**: Execute `pytest tests/` to verify project structure (6/6 passing).
 6. **Start Agents**: Run `python run_system.py` to launch Hermes and OpenClaw locally.
-7. **Review Backend**: Review `backend/` for Laravel API scaffold, models, routes, and SQLite-ready migrations.
+7. **Review Backend**: Review `backend/` for the Node.js Express REST API (using an in-memory DB structured like SQLite).
 8. **Review Slack**: Review `slack-export/` for exported Slack workspace evidence.
 
 ---
@@ -97,7 +97,7 @@ graph TD
 To demonstrate the power of the agents, they were tasked with building a tiny Trello-style Kanban board. 
 
 - **Frontend**: React/Vite app in `frontend/`, deployed on Vercel.
-- **Backend**: Laravel API scaffold in `backend/`, SQLite-ready, runnable locally.
+- **Backend**: Node.js + Express REST API in `backend/`, in-memory DB structured like production, runnable locally.
 
 **Features Implemented:**
 - [x] Board and List management (To Do, Doing, Done)

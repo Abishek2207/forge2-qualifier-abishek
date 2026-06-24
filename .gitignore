@@ -35,3 +35,9 @@ $RECYCLE.BIN/
 !outputs/greetings.md
 !outputs/results.json
 !outputs/autonomous-run.txt
+
+# ── Node.js ──────────────────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+*.sqlite
+database.sqlite

@@ -1,28 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import { Calendar, User, Tag, Edit2 } from 'lucide-react';
+import { Calendar, User, Tag, Edit2, Trash2 } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 import { isPast, parseISO } from 'date-fns';
 import './index.css';
 
-const INITIAL_DATA = {
-  lists: {
-    'list-1': { id: 'list-1', title: 'To Do', cardIds: ['card-1'] },
-    'list-2': { id: 'list-2', title: 'Doing', cardIds: [] },
-    'list-3': { id: 'list-3', title: 'Done', cardIds: [] },
-  },
-  cards: {
-    'card-1': {
-      id: 'card-1',
-      title: 'Setup Kanban Board',
-      description: 'Implement drag and drop',
-      tags: ['blue'],
-      member: 'AR',
-      dueDate: new Date().toISOString().split('T')[0]
-    }
-  },
-  listOrder: ['list-1', 'list-2', 'list-3'],
+const API_URL = 'http://localhost:3001/tasks';
+
+const LISTS = {
+  'list-1': { id: 'list-1', title: 'To Do' },
+  'list-2': { id: 'list-2', title: 'Doing' },
+  'list-3': { id: 'list-3', title: 'Done' }
 };
+
+const LIST_ORDER = ['list-1', 'list-2', 'list-3'];
 
 const TAG_COLORS = [
   { id: 'red', label: 'Urgent' },
@@ -32,9 +23,14 @@ const TAG_COLORS = [
 ];
 
 function App() {
-  const [data, setData] = useState(() => {
-    const saved = localStorage.getItem('kanban-data');
-    return saved ? JSON.parse(saved) : INITIAL_DATA;
+  const [data, setData] = useState({
+    lists: {
+      'list-1': { ...LISTS['list-1'], cardIds: [] },
+      'list-2': { ...LISTS['list-2'], cardIds: [] },
+      'list-3': { ...LISTS['list-3'], cardIds: [] },
+    },
+    cards: {},
+    listOrder: LIST_ORDER,
   });
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -45,11 +41,65 @@ function App() {
     title: '', description: '', tag: 'blue', member: '', dueDate: ''
   });
 
-  useEffect(() => {
-    localStorage.setItem('kanban-data', JSON.stringify(data));
-  }, [data]);
+  const fetchTasks = async () => {
+    try {
+      const res = await fetch(API_URL);
+      const tasks = await res.json();
+      
+      const newCards = {};
+      const newLists = {
+        'list-1': { ...LISTS['list-1'], cardIds: [] },
+        'list-2': { ...LISTS['list-2'], cardIds: [] },
+        'list-3': { ...LISTS['list-3'], cardIds: [] },
+      };
 
-  const onDragEnd = (result) => {
+      tasks.forEach(t => {
+        let listId = 'list-1';
+        if (t.status === 'Doing') listId = 'list-2';
+        if (t.status === 'Done') listId = 'list-3';
+
+        // Parse description if it's JSON to get tags/members, otherwise basic string
+        let desc = t.description;
+        let tags = ['blue'];
+        let member = '';
+        let dueDate = '';
+        
+        try {
+          if (t.description && t.description.startsWith('{')) {
+            const parsed = JSON.parse(t.description);
+            desc = parsed.text || '';
+            tags = parsed.tags || ['blue'];
+            member = parsed.member || '';
+            dueDate = parsed.dueDate || '';
+          }
+        } catch (e) {}
+
+        newCards[t.id] = {
+          id: t.id,
+          title: t.title,
+          description: desc,
+          tags,
+          member,
+          dueDate
+        };
+        newLists[listId].cardIds.push(t.id);
+      });
+
+      setData({
+        lists: newLists,
+        cards: newCards,
+        listOrder: LIST_ORDER
+      });
+    } catch (err) {
+      console.error('Failed to fetch tasks', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const onDragEnd = async (result) => {
     const { destination, source, draggableId } = result;
     if (!destination) return;
     if (destination.droppableId === source.droppableId && destination.index === source.index) return;
@@ -57,28 +107,44 @@ function App() {
     const startList = data.lists[source.droppableId];
     const finishList = data.lists[destination.droppableId];
 
+    // Optimistic UI update
+    let newData = { ...data };
+    
     if (startList === finishList) {
       const newCardIds = Array.from(startList.cardIds);
       newCardIds.splice(source.index, 1);
       newCardIds.splice(destination.index, 0, draggableId);
 
       const newList = { ...startList, cardIds: newCardIds };
-      setData({ ...data, lists: { ...data.lists, [newList.id]: newList } });
-      return;
+      newData = { ...data, lists: { ...data.lists, [newList.id]: newList } };
+      setData(newData);
+    } else {
+      const startCardIds = Array.from(startList.cardIds);
+      startCardIds.splice(source.index, 1);
+      const newStart = { ...startList, cardIds: startCardIds };
+
+      const finishCardIds = Array.from(finishList.cardIds);
+      finishCardIds.splice(destination.index, 0, draggableId);
+      const newFinish = { ...finishList, cardIds: finishCardIds };
+
+      newData = {
+        ...data,
+        lists: { ...data.lists, [newStart.id]: newStart, [newFinish.id]: newFinish }
+      };
+      setData(newData);
+
+      // Save to backend if changing status
+      try {
+        await fetch(`${API_URL}/${draggableId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: finishList.title })
+        });
+      } catch (err) {
+        console.error('Failed to update task status', err);
+        fetchTasks(); // rollback on error
+      }
     }
-
-    const startCardIds = Array.from(startList.cardIds);
-    startCardIds.splice(source.index, 1);
-    const newStart = { ...startList, cardIds: startCardIds };
-
-    const finishCardIds = Array.from(finishList.cardIds);
-    finishCardIds.splice(destination.index, 0, draggableId);
-    const newFinish = { ...finishList, cardIds: finishCardIds };
-
-    setData({
-      ...data,
-      lists: { ...data.lists, [newStart.id]: newStart, [newFinish.id]: newFinish }
-    });
   };
 
   const openModal = (listId, cardId = null) => {
@@ -99,46 +165,47 @@ function App() {
     setModalOpen(true);
   };
 
-  const saveCard = () => {
+  const saveCard = async () => {
     if (!formData.title.trim()) return;
 
-    if (editingCardId) {
-      setData(prev => ({
-        ...prev,
-        cards: {
-          ...prev.cards,
-          [editingCardId]: {
-            ...prev.cards[editingCardId],
-            title: formData.title,
-            description: formData.description,
-            tags: [formData.tag],
-            member: formData.member,
-            dueDate: formData.dueDate
-          }
-        }
-      }));
-    } else {
-      const newCardId = uuidv4();
-      const newCard = {
-        id: newCardId,
-        title: formData.title,
-        description: formData.description,
-        tags: [formData.tag],
-        member: formData.member,
-        dueDate: formData.dueDate
-      };
-      
-      const list = data.lists[activeListId];
-      setData(prev => ({
-        ...prev,
-        cards: { ...prev.cards, [newCardId]: newCard },
-        lists: {
-          ...prev.lists,
-          [list.id]: { ...list, cardIds: [...list.cardIds, newCardId] }
-        }
-      }));
+    const list = data.lists[activeListId];
+    const status = list.title;
+    const fullDesc = JSON.stringify({
+      text: formData.description,
+      tags: [formData.tag],
+      member: formData.member,
+      dueDate: formData.dueDate
+    });
+
+    try {
+      if (editingCardId) {
+        await fetch(`${API_URL}/${editingCardId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title: formData.title, status, description: fullDesc })
+        });
+      } else {
+        const newCardId = uuidv4();
+        await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: newCardId, title: formData.title, status, description: fullDesc })
+        });
+      }
+      setModalOpen(false);
+      fetchTasks();
+    } catch (err) {
+      console.error('Failed to save card', err);
     }
-    setModalOpen(false);
+  };
+
+  const deleteCard = async (cardId) => {
+    try {
+      await fetch(`${API_URL}/${cardId}`, { method: 'DELETE' });
+      fetchTasks();
+    } catch (err) {
+      console.error('Failed to delete card', err);
+    }
   };
 
   return (
@@ -148,7 +215,7 @@ function App() {
         <div className="board-content">
           {data.listOrder.map(listId => {
             const list = data.lists[listId];
-            const cards = list.cardIds.map(taskId => data.cards[taskId]);
+            const cards = list.cardIds.map(taskId => data.cards[taskId]).filter(Boolean);
 
             return (
               <div key={list.id} className="list">
@@ -169,13 +236,16 @@ function App() {
                               >
                                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                                   <div className="card-tags">
-                                    {card.tags.map(tag => (
+                                    {card.tags && card.tags.map(tag => (
                                       <span key={tag} className={`tag tag-${tag}`}>
                                         {TAG_COLORS.find(t => t.id === tag)?.label}
                                       </span>
                                     ))}
                                   </div>
-                                  <Edit2 size={14} style={{cursor:'pointer', color:'#5e6c84'}} onClick={() => openModal(list.id, card.id)} />
+                                  <div style={{display:'flex', gap:'8px'}}>
+                                    <Edit2 size={14} style={{cursor:'pointer', color:'#5e6c84'}} onClick={() => openModal(list.id, card.id)} />
+                                    <Trash2 size={14} style={{cursor:'pointer', color:'#ff5630'}} onClick={() => deleteCard(card.id)} />
+                                  </div>
                                 </div>
                                 <div className="card-title">{card.title}</div>
                                 {card.description && <div style={{fontSize: 12, color: '#5e6c84', marginBottom: 8}}>{card.description}</div>}
