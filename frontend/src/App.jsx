@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
-const API = "http://localhost:3000";
+const API = import.meta.env.VITE_API_URL || "https://forge2-qualifier-abishek.onrender.com";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function formatTime(iso) {
